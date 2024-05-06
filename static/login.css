@@ -15,12 +15,10 @@ body {
 }
 
 .login-page {
-    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 300px;
-    gap : 20px;
+    width: 500px;
+    gap: 20px;
 }
 
 .login-page > div {
@@ -44,7 +42,9 @@ body {
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
+    margin-top: 5px;
 }
+
 
 .login-form button:hover {
     background-color: #0056b3;

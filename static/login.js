@@ -110,7 +110,7 @@ function LogInForm({isLoginFormVisible , setMessage , message, toggleForms}) {
 
 
     return (
-        <div className = "login-page">
+        <div  className = "login-page">
             <form className="login-form" id="loginForm" action="/login" method="POST" style={{ display: isLoginFormVisible ? 'block' : 'none' }}>
             <input name="username" type="text" placeholder="username" value={formData.username} onChange={handleChange} />
             <input name="password" type="password" placeholder="password" value={formData.password} onChange={handleChange} />
