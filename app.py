@@ -40,3 +40,7 @@ def signup_info_valid(new_user):
         if (user.phone == new_user.get('phone')):
             return "this phone number is linked to another account"
     return "signed up suceesfully"
+
+@app.route('/home/<username>')
+def Home(username):
+    return render_template("home.html" , username = username)
