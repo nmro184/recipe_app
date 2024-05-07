@@ -44,7 +44,7 @@ function SignUpForm({isLoginFormVisible , setMessage , message, toggleForms}){
               throw new Error(errorData.message);
             }
             const responseData = await response.json();
-            setMessage(responseData['message']);
+            setMessage(responseData[0].message);
           } catch (error) {
             setMessage(error.message);
           }
