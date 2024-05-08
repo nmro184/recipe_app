@@ -44,3 +44,7 @@ def signup_info_valid(new_user):
 @app.route('/home/<username>')
 def Home(username):
     return render_template("home.html" , username = username)
+
+@app.route('/create_recipe/<username>')
+def create_recipe(username):
+    return render_template("create.html", username = username)

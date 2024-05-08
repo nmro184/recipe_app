@@ -3,7 +3,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 
 function Header(){
     const createRecipe = () => {
-        window.location.href = '/'
+        window.location.href = `/create_recipe/${username}`
     };
     return (
         <header>
