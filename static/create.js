@@ -1,13 +1,15 @@
 
 
 function CreateRecipeForm() {
-    const [imageSrc, setImageSrc] = React.useState(null);
+    const [message , setMessage] = React.useState('')
+    const [imageSrc, setImageSrc] = React.useState(null); 
     const [formData, setFormData] = React.useState({
+        image : imageSrc ,
         title: '',
         description: '',
         time: '',
         difficulty: '',
-        kosher: false, // For checkboxes, set initial value to false
+        kosher: false, 
         specialDescriptor: '',
         author : username
     });
@@ -27,10 +29,6 @@ function CreateRecipeForm() {
         handleImage(file);
     };
 
-    const handleDragOver = (event) => {
-        event.preventDefault();
-    };
-
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
@@ -42,26 +40,72 @@ function CreateRecipeForm() {
             const reader = new FileReader();
             reader.onload = () => {
                 setImageSrc(reader.result);
+                setFormData({
+                    ...formData,
+                    image: reader.result,
+                });
+                
             };
             reader.readAsDataURL(file);
         }
     };
     const handleImageRemove = () =>{
         setImageSrc(null);
+        setFormData({
+            ...formData,
+            image: null,
+        });
     }
 
-    const handleSubmit = (event) => {
+    const validateForm = () =>{
+        const { image, title , description , time , difficulty  } = formData;
+        if (!image || !title || !description || !time || !difficulty){
+            setMessage("please fill in the required blank fields")
+            return false
+        }else{
+            return true
+        }
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        const valid = validateForm();
+            if (valid)
+                {
+                    try {
+                        const response = await fetch('/new_recipe', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(formData)
+                        });
+                  
+                        if (!response.ok) {
+                          const errorData = await response.json();
+                          throw new Error(errorData.message);
+                        }
+                  
+                        const responseData = await response.json();
+                        window.location.href = responseData.redirect; 
+                      } catch (error) {
+                        setMessage(error.message);
+                      }
+                }
+            else{
+                console.log(valid)
+                console.log(formData)
+            }
     };
     return (
         <form>
+                {message && <h1> {message} </h1>}
                 {imageSrc == null &&
                 <input 
                     type="file" 
                     name="image" 
                     accept="image/*" 
                     onChange={handleFileChange}
-                    onDragOver={handleDragOver} 
                     onDrop = {handleDrop}
                     className="file-input"
                 />}

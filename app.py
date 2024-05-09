@@ -1,6 +1,7 @@
 from flask import Flask , render_template , request , jsonify
 from classes import User
-from db import get_users , signup
+from db import get_users , signup , store_new_recipe
+import base64
 app = Flask(__name__)
 app.secret_key = 'guywrffuwfuwg'
 
@@ -48,3 +49,12 @@ def Home(username):
 @app.route('/create_recipe/<username>')
 def create_recipe(username):
     return render_template("create.html", username = username)
+
+@app.route('/new_recipe' , methods =['POST'])
+def new_recipe():
+     new_recipe = request.json
+     username = new_recipe.get('author')
+     store_new_recipe(new_recipe)
+     return jsonify({'redirect' : f'/home/{username}' })
+
+
