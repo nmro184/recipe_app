@@ -8,7 +8,8 @@ function CreateRecipeForm() {
         time: '',
         difficulty: '',
         kosher: false, // For checkboxes, set initial value to false
-        specialDescriptor: ''
+        specialDescriptor: '',
+        author : username
     });
 
     const handleChange = (event) => {
@@ -45,12 +46,16 @@ function CreateRecipeForm() {
             reader.readAsDataURL(file);
         }
     };
+    const handleImageRemove = () =>{
+        setImageSrc(null);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
     };
     return (
         <form>
+                {imageSrc == null &&
                 <input 
                     type="file" 
                     name="image" 
@@ -59,9 +64,12 @@ function CreateRecipeForm() {
                     onDragOver={handleDragOver} 
                     onDrop = {handleDrop}
                     className="file-input"
-                />
+                />}
             {imageSrc && (
-                <img src={imageSrc} alt="Uploaded" className="uploaded-image" />
+                <>
+                    <img src={imageSrc} alt="Uploaded" className="uploaded-image" />
+                    <button onClick = {handleImageRemove}>remove </button>
+                </>
             )}
             <input type="text" name="title" className="title-input" placeholder="Title" value={formData.title} onChange={handleChange} />
             <textarea name="description" className="description-input" placeholder="Description" value={formData.description} onChange={handleChange} ></textarea>
