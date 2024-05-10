@@ -1,5 +1,5 @@
 import sqlite3
-from classes import User
+from classes import User , Recipe
 DB_NAME = "recipe.db"
 
 def query(sql: str = "", data: tuple = ()):
@@ -21,3 +21,10 @@ def signup(new_user):
 def store_new_recipe(new_recipe):
     data = (new_recipe.get('image') , new_recipe.get('title') , new_recipe.get('description') , new_recipe.get('time') , new_recipe.get('difficulty'), new_recipe.get('kosher') , new_recipe.get('specialDescriptor') , new_recipe.get('author'))
     query("INSERT INTO recipes (image, title , description, time , difficulty , kosher , special , author) VALUES (?, ? ,? , ? , ? , ? , ? , ?)", data)
+
+def get_recipes():
+    recipes_list =[]
+    recipes_tuple_list = query("SELECT * FROM recipes ")
+    for recipe in recipes_tuple_list:
+       recipes_list.append(Recipe(recipe))
+    return recipes_list

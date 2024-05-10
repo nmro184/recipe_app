@@ -1,7 +1,6 @@
 from flask import Flask , render_template , request , jsonify
-from classes import User
-from db import get_users , signup , store_new_recipe
-import base64
+from db import get_users , signup , store_new_recipe , get_recipes
+
 app = Flask(__name__)
 app.secret_key = 'guywrffuwfuwg'
 
@@ -56,5 +55,13 @@ def new_recipe():
      username = new_recipe.get('author')
      store_new_recipe(new_recipe)
      return jsonify({'redirect' : f'/home/{username}' })
+
+@app.route('/get_all_recipes')
+def get_all_recipes():
+    recipes_tuple_list = get_recipes()
+    recipes_list = []
+    for recipe in recipes_tuple_list:
+        recipes_list.append(recipe.to_dict())
+    return jsonify({'recipes' : recipes_list}),200
 
 

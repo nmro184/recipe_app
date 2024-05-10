@@ -22,23 +22,58 @@ function Header(){
 }
 function Main(){
     return(
-        <RecipeCard/>
+        <RecipeCardGrid/>
     )
 }
-function RecipeCard(){
-    return(
-        <div className = 'recipe-card'>
-            <image></image>
-            <h2>title</h2>
-            <div className = "descriptors">
-                <h4>time</h4>
-                <h4>diffculty</h4>
-                <h4> kosher </h4>
-                <h4> special descriptor </h4>
-            </div>
+function RecipeCardGrid(){
+    const [recipes, setRecipes] = React.useState([]);
 
+        React.useEffect(() => {
+            const getAllRecipes = async () => {
+                try {
+                    const response = await fetch('/get_all_recipes');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch recipes');
+                    }
+                    const data = await response.json();
+                    setRecipes(data.recipes);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            getAllRecipes();
+        }, []);
+
+        if (recipes.length === 0) {
+            return <div>Loading...</div>;
+        }
+
+        return (
+            <div className="recipe-cards-grid">
+                {recipes.map((recipe, index) => (
+                    <RecipeCard key={index} recipe={recipe} />
+                ))}
+            </div>
+        );
+}
+
+function RecipeCard({ recipe }) {
+    
+    const { image, title, time, difficulty, kosher, special } = recipe;
+
+    return (
+        <div className="recipe-card">
+            <img src={image} alt={title} />
+            <h2>{title}</h2>
+            <div className="descriptors">
+                <h4>{time}</h4>
+                <h4>{difficulty}</h4>
+                <h4> {kosher ? '' : 'Not'} Kosher</h4>
+                <h4>{special}</h4>
+            </div>
         </div>
-    )
+    );
 }
 function App(){
     return(
