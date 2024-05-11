@@ -27,7 +27,7 @@ class Recipe:
         self.difficulty = recipe_tuple[5]
         self.kosher = recipe_tuple[6]
         self.special = recipe_tuple[7]
-        self.author = recipe_tuple[5]
+        self.author = recipe_tuple[8]
 
        
     

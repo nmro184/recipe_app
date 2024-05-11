@@ -1,5 +1,5 @@
 from flask import Flask , render_template , request , jsonify
-from db import get_users , signup , store_new_recipe , get_recipes
+from db import get_users , signup , store_new_recipe , get_recipes , get_recipe , delete_recipe
 
 app = Flask(__name__)
 app.secret_key = 'guywrffuwfuwg'
@@ -65,3 +65,16 @@ def get_all_recipes():
     return jsonify({'recipes' : recipes_list}),200
 
 
+@app.route('/recipe/<username>/<id>')
+def recipe(username , id):
+    return render_template("recipe.html" , id = id , username = username)
+
+@app.route('/get_recipe/<id>')
+def get_recipe_by_id(id):
+    recipe = get_recipe(id)
+    return jsonify({'recipe' : recipe.to_dict()})
+
+@app.route('/delete/<id>')
+def delete_recipe_by_id(id):
+    delete_recipe(id)
+    return jsonify({'message': 'Recipe deleted successfully'}), 200

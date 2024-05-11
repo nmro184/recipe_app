@@ -28,3 +28,11 @@ def get_recipes():
     for recipe in recipes_tuple_list:
        recipes_list.append(Recipe(recipe))
     return recipes_list
+
+def get_recipe(id):
+    recipe = query(f"SELECT * FROM recipes WHERE id = {id}")
+    return Recipe(recipe[0])
+
+def delete_recipe(id):
+    query(f"DELETE FROM recipes WHERE id = {id}")
+    return True
