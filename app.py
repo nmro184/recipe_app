@@ -54,7 +54,7 @@ def new_recipe():
      new_recipe = request.json
      username = new_recipe.get('author')
      store_new_recipe(new_recipe)
-     return jsonify({'redirect' : f'/home/{username}' })
+     return jsonify({'redirect' : f'/home/{username}' }, 200)
 
 @app.route('/get_all_recipes')
 def get_all_recipes():
