@@ -11,17 +11,28 @@ function Header({recipe}){
     }
     return(
             <header>
-                <h2 className="welcome">
+                <h2 className="header-item">
                     Welcome {username}
                 </h2>
-                {recipe.author == username &&
-                <div>
-                    <button onClick = {editRecipe}> edit </button>
-                    <button onClick = {deleteRecipe}> delete </button>
-                </div>
+                {
+                    recipe.author == username 
+                    &&
+                    <div>
+                        <h2 className = "header-item" onClick = {editRecipe}> edit </h2>
+                    </div>
                 }
-                <a href={`/home/${username}`} className="back-button">back</a>
-            </header>)
+                {
+                    recipe.author == username 
+                    &&
+                    <div>
+                        <h2 className = "header-item" onClick = {deleteRecipe}> delete </h2>
+                    </div>
+                }
+                <a href={`/home/${username}`} >
+                    <h2 className="header-item">back</h2>
+                </a>
+            </header>
+            )
 }
 function Recipe({recipe}){
    

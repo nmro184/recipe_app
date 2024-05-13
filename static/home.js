@@ -1,7 +1,10 @@
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 
-function Header({setSearchQuery}){
+function Header({setSearchQuery , userRecipes ,setUserRecipes}){
+    const  myRecipes = () =>{
+        setUserRecipes(!userRecipes);
+    }
     const createRecipe = () => {
         window.location.href = `/create_recipe/${username}`
     };
@@ -11,16 +14,22 @@ function Header({setSearchQuery}){
     }
     return (
         <header>
-            <h2 className="welcome">
-                Welcome {username}
-                <button> my recipes </button>
-                <button className = "add-recipe-button" onClick = {createRecipe}>+</button>
-            </h2>
-          
+            <div className="welcome-div">
+                <h2 className = "header-item">Welcome {username} </h2>
+            </div>
+          <div>
+            <h2 onClick = {myRecipes} className = "header-item">my recipes</h2>
+          </div> 
+
           <div className="search">
             <input id="search-bar" type="search" className="search-bar" onChange ={handleSearch} />
           </div>
-          <a href="/" className="logout-button">log out</a>
+          <div>
+            <h2 className = "header-item" onClick = {createRecipe}>new recipe</h2>
+          </div>
+          <a href="/"> 
+            <h2 className="header-item">log out</h2>
+          </a>
         </header>
       );
 }
@@ -67,6 +76,7 @@ function RecipeCard({ recipe }) {
     );
 }
 function App(){
+    const [userRecipes , setUserRecipes ] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [recipes, setRecipes] = React.useState([]);
     React.useEffect(() => {
@@ -85,12 +95,17 @@ function App(){
 
         getAllRecipes();
     }, []);
-    const filteredRecipes = recipes.filter(recipe =>
-        recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredRecipes =
+        userRecipes ? 
+            recipes.filter(recipe =>
+                recipe.author.toLowerCase() == username.toLowerCase())
+        :
+            recipes.filter(recipe =>
+                recipe.title.toLowerCase().includes(searchQuery.toLowerCase()))
+        ;
     return(
         <>
-            <Header setSearchQuery={setSearchQuery}/>
+            <Header setSearchQuery={setSearchQuery} userRecipes = {userRecipes} setUserRecipes = {setUserRecipes}/>
             <Main recipes = {filteredRecipes}/>
         </>
     )

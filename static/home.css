@@ -1,4 +1,4 @@
-.welcome{
+.welcome-div{
     margin-top: 0px;
     display: flex;
     flex-direction: column;
@@ -9,20 +9,11 @@
 header{
     display: flex;
     justify-content: space-between; 
-    align-items: center; 
+    align-items: top; 
     padding: 10px; 
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.logout-button{
-    background-color: rgb(255, 0, 0);
-    display: inline-block;
-    text-decoration: none;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-}
 .recipe-card {
     margin-top: 10px;
     width: 300px; 
@@ -89,3 +80,19 @@ header{
     grid-gap: 20px;
 }
 
+.header-item{
+    margin-top: 0px;
+    font-size: large;
+    font-weight: bold;
+    background-color: rgb(13, 6, 116);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.search-bar{
+    margin-top: 15px;
+}

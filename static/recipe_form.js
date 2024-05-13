@@ -1,4 +1,17 @@
 
+function Header({initialRecipe}){
+    return(
+        <header>
+            <h2 className="header-item"> {username} </h2>
+            <h2 className = "header-item"> {initialRecipe.image ? "Edit recipe form" : "Create recipe form"}</h2>
+            <a href={`/home/${username}`} >
+            <h2 className="header-item">back</h2>
+
+            </a>
+        </header>
+        );
+}
+
 
 function RecipeForm({initialRecipe}) {
     const [message, setMessage] = React.useState('');
@@ -139,7 +152,7 @@ function RecipeForm({initialRecipe}) {
 async function RenderApp() {
     const initialRecipe = await fetchInitialRecipe();
     const root = ReactDOM.createRoot(document.getElementById('root'))
-   root.render(<App initialRecipe={initialRecipe} />);
+    root.render(<App initialRecipe={initialRecipe} />);
 }
 
 async function fetchInitialRecipe() {
@@ -160,6 +173,12 @@ async function fetchInitialRecipe() {
 }
 
 function App({ initialRecipe }) {
-    return <RecipeForm initialRecipe={initialRecipe} />;
+    
+    return (
+    <div>
+        <Header initialRecipe={initialRecipe}/>
+        <RecipeForm initialRecipe={initialRecipe} />
+    </div>   
+    );
 }
 RenderApp();
