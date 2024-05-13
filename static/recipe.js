@@ -1,53 +1,31 @@
 const root = ReactDOM.createRoot(document.getElementById('root'))
  
-function Header(){
-    const deleteRecipe = async () => {
-        if (window.confirm('Are you sure you want to delete this recipe?')) {
-            try {
-                const response = await fetch(`/delete/${recipe_id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to delete recipe');
-                }
-                await response.json();
-                window.location.href = `/home/${username}`;
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    };
-    
+function Header({recipe}){
+
+    const deleteRecipe =  () => {
+        window.location.href = `/delete/${username}/${recipe.id}`
+    }
+
     const editRecipe = () =>{
-        console.log("edit")
+        window.location.href = `/edit_recipe/${username}/${recipe.id}`;
     }
     return(
             <header>
                 <h2 className="welcome">
                     Welcome {username}
                 </h2>
-                <button onClick = {editRecipe}> edit </button>
-                <button onClick = {deleteRecipe}> delete </button>
+                {recipe.author == username &&
+                <div>
+                    <button onClick = {editRecipe}> edit </button>
+                    <button onClick = {deleteRecipe}> delete </button>
+                </div>
+                }
                 <a href={`/home/${username}`} className="back-button">back</a>
             </header>)
 }
-function Recipe(){
-    const [recipe , setRecipe] = React.useState({})
-    React.useEffect(() => {
-        const getRecipe = async () => { 
-            try {
-                const response = await fetch(`/get_recipe/${recipe_id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch recipe');
-                }
-                const data = await response.json();
-                setRecipe(data.recipe);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getRecipe();
-    }, []);
-    const { image, title, description, time, difficulty, kosher, special , author , id } = recipe;
+function Recipe({recipe}){
+   
+    const { image, title, description, time, difficulty, kosher, special , author  } = recipe;
 
     return(
         <div className="recipe" >
@@ -65,10 +43,27 @@ function Recipe(){
     )
 }
 function App(){
+    const [recipe , setRecipe] = React.useState({})
+    React.useEffect(() => {
+        const getRecipe = async () => { 
+            try {
+                const response = await fetch(`/get_recipe/${recipe_id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch recipe');
+                }
+                const data = await response.json();
+                setRecipe(data.recipe);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getRecipe();
+    }, []);
     return(
     <>
-        <Header/>
-        <Recipe/>
+        <Header recipe = {recipe}/>
+        <Recipe recipe = {recipe}/>
     </>
     )
 }

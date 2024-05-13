@@ -36,3 +36,8 @@ def get_recipe(id):
 def delete_recipe(id):
     query(f"DELETE FROM recipes WHERE id = {id}")
     return True
+
+def update_recipe(recipe_id , updated_recipe):
+    data = (updated_recipe.get('image'), updated_recipe.get('title'), updated_recipe.get('description'), updated_recipe.get('time'), updated_recipe.get('difficulty'), updated_recipe.get('kosher'), updated_recipe.get('specialDescriptor'), updated_recipe.get('author'), recipe_id)
+    query("UPDATE recipes SET image=?, title=?, description=?, time=?, difficulty=?, kosher=?, special=?, author=? WHERE id=?", data)
+    return True

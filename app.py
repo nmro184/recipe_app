@@ -1,5 +1,5 @@
-from flask import Flask , render_template , request , jsonify
-from db import get_users , signup , store_new_recipe , get_recipes , get_recipe , delete_recipe
+from flask import Flask , render_template , request , jsonify , redirect
+from db import get_users , signup , store_new_recipe , get_recipes , get_recipe , delete_recipe ,  update_recipe
 
 app = Flask(__name__)
 app.secret_key = 'guywrffuwfuwg'
@@ -47,7 +47,7 @@ def Home(username):
 
 @app.route('/create_recipe/<username>')
 def create_recipe(username):
-    return render_template("create.html", username = username)
+    return render_template("recipe_form.html", username = username , recipe_id = -1)
 
 @app.route('/new_recipe' , methods =['POST'])
 def new_recipe():
@@ -74,7 +74,16 @@ def get_recipe_by_id(id):
     recipe = get_recipe(id)
     return jsonify({'recipe' : recipe.to_dict()})
 
-@app.route('/delete/<id>')
-def delete_recipe_by_id(id):
+@app.route('/delete/<username>/<id>')
+def delete_recipe_by_id(username ,id):
     delete_recipe(id)
-    return jsonify({'message': 'Recipe deleted successfully'}), 200
+    return redirect(f'/home/{username}')
+
+@app.route('/edit_recipe/<username>/<recipe_id>')
+def edit_recipe_by_id(username , recipe_id):
+    return render_template("recipe_form.html" , username = username , recipe_id = recipe_id)
+
+@app.route('/update_recipe/<username>/<recipe_id>' , methods = ['PUT'])
+def update_recipe_by_id(username , recipe_id):
+    update_recipe(recipe_id , request.json)
+    return jsonify({'redirect' : f'/home/{username}' })

@@ -1,17 +1,17 @@
 
 
-function CreateRecipeForm() {
-    const [message , setMessage] = React.useState('')
-    const [imageSrc, setImageSrc] = React.useState(null); 
+function RecipeForm({initialRecipe}) {
+    const [message, setMessage] = React.useState('');
+    const [imageSrc, setImageSrc] = React.useState(initialRecipe.image || null);
     const [formData, setFormData] = React.useState({
-        image : imageSrc ,
-        title: '',
-        description: '',
-        time: '',
-        difficulty: '',
-        kosher: false, 
-        specialDescriptor: '',
-        author : username
+        image: initialRecipe.image || null,
+        title: initialRecipe.title || '',
+        description: initialRecipe.description || '',
+        time: initialRecipe.time || '',
+        difficulty: initialRecipe.difficulty || '',
+        kosher: initialRecipe.kosher || false,
+        specialDescriptor: initialRecipe.specialDescriptor || '',
+        author: initialRecipe.author || username
     });
 
     const handleChange = (event) => {
@@ -70,33 +70,39 @@ function CreateRecipeForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const valid = validateForm();
-            if (valid)
-                {
-                    try {
-                        const response = await fetch('/new_recipe', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json'
-                          },
-                          body: JSON.stringify(formData)
-                        });
-                  
-                        if (!response.ok) {
-                          const errorData = await response.json();
-                          throw new Error(errorData.message);
-                        }
-                  
-                        const responseData = await response.json();
-                        window.location.href = responseData.redirect; 
-                      } catch (error) {
-                        setMessage(error.message);
-                      }
+        if (valid) {
+            try {
+                let url = '/new_recipe';
+                let method = 'POST';
+                if (initialRecipe && initialRecipe.id) {
+                    url = `/update_recipe/${username}/${initialRecipe.id}`;
+                    method = 'PUT';
                 }
-            else{
-                console.log(valid)
-                console.log(formData)
+    
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message);
+                }
+    
+                const responseData = await response.json();
+                window.location.href = responseData.redirect;
+            } catch (error) {
+                setMessage(error.message);
             }
+        } else {
+            console.log(valid);
+            console.log(formData);
+        }
     };
+    
     return (
         <form>
                 {message && <h1> {message} </h1>}
@@ -129,5 +135,31 @@ function CreateRecipeForm() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<CreateRecipeForm />);
+
+async function RenderApp() {
+    const initialRecipe = await fetchInitialRecipe();
+    const root = ReactDOM.createRoot(document.getElementById('root'))
+   root.render(<App initialRecipe={initialRecipe} />);
+}
+
+async function fetchInitialRecipe() {
+    if (recipe_id != -1) {
+        try {
+            const response = await fetch(`/get_recipe/${recipe_id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch recipe');
+            }
+            const data = await response.json();
+            return data.recipe;
+        } catch (error) {
+            console.error(error);
+            return {};
+        }
+    }
+    return {};
+}
+
+function App({ initialRecipe }) {
+    return <RecipeForm initialRecipe={initialRecipe} />;
+}
+RenderApp();
