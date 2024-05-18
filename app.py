@@ -3,6 +3,8 @@ from db import get_users , signup , store_new_recipe , get_recipes , get_recipe 
 
 app = Flask(__name__)
 app.secret_key = 'guywrffuwfuwg'
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 
 @app.route('/')
 def welcome():
@@ -54,7 +56,7 @@ def new_recipe():
      new_recipe = request.json
      username = new_recipe.get('author')
      store_new_recipe(new_recipe)
-     return jsonify({'redirect' : f'/home/{username}' }, 200)
+     return jsonify({ 'redirect' : f'/home/{username}' }, 200)
 
 @app.route('/get_all_recipes')
 def get_all_recipes():
@@ -86,4 +88,4 @@ def edit_recipe_by_id(username , recipe_id):
 @app.route('/update_recipe/<username>/<recipe_id>' , methods = ['PUT'])
 def update_recipe_by_id(username , recipe_id):
     update_recipe(recipe_id , request.json)
-    return jsonify({'redirect' : f'/home/{username}' })
+    return jsonify({ 'redirect' : f'/home/{username}' }, 200)

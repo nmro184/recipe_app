@@ -85,7 +85,7 @@ function RecipeForm({initialRecipe}) {
         const valid = validateForm();
         if (valid) {
             try {
-                let url = '/new_recipe';
+                let url = `/new_recipe`;
                 let method = 'POST';
                 if (initialRecipe && initialRecipe.id) {
                     url = `/update_recipe/${username}/${initialRecipe.id}`;
@@ -106,7 +106,7 @@ function RecipeForm({initialRecipe}) {
                 }
     
                 const responseData = await response.json();
-                window.location.href = responseData.redirect;
+                window.location.href = responseData[0].redirect;
             } catch (error) {
                 setMessage(error.message);
             }
